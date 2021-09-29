@@ -24,21 +24,17 @@ def webServer(port=13331):
         message = connectionSocket.recv(2048).decode()  #Fill in start    #Fill in end
         filename = message.split()[1]
         f = open(filename[1:])
-        requested_http_ver = message.split()[2]
         outputdata = [line for line in f]   #Fill in start     #Fill in end
         f.close()
         #Send one HTTP header line into socket.
         #Fill in start
-        connectionSocket.send(requested_http_ver.encode())
-        connectionSocket.send(" ".encode())
-        connectionSocket.send("200 OK".encode())
-        connectionSocket.send("\r\n".encode())
-
+        ans = "HTTP/1.1 200 OK\r\n"
+        connectionSocket.send(ans.encode())
 
         now = datetime.now()
         stamp = mktime(now.timetuple())
-        connectionSocket.send(format_date_time(stamp).encode())
-        connectionSocket.send("\r\n".encode())
+        timestamp = format_date_time(stamp) + "\r\n"
+        connectionSocket.send(timestamp.encode())
         #Fill in end
 
         #Send the content of the requested file to the client
@@ -56,11 +52,11 @@ def webServer(port=13331):
 
         now = datetime.now()
         stamp = mktime(now.timetuple())
-        connectionSocket.send(format_date_time(stamp).encode())
+        timestamp = format_date_time(stamp) + "\r\n"
+        connectionSocket.send(timestamp.encode())
 
         #Close client socket
         #Fill in start
-        connectionSocket.send("\r\n".encode())
         connectionSocket.send("\r\n".encode())
         connectionSocket.send("<body><h1>404 NOT FOUND</h1></body>".encode())
         connectionSocket.close()
