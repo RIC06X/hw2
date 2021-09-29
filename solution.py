@@ -50,10 +50,8 @@ def webServer(port=13331):
       except IOError:
         # Send response message for file not found (404)
         #Fill in start
-        connectionSocket.send(requested_http_ver.encode())
-        connectionSocket.send(" ".encode())
-        connectionSocket.send("404 Not Found".encode())
-        connectionSocket.send("\r\n".encode())
+        ans = "HTTP/1.1 404 Not Found\r\n"
+        connectionSocket.send(ans.encode())
         #Fill in end
 
         now = datetime.now()
@@ -63,6 +61,8 @@ def webServer(port=13331):
         #Close client socket
         #Fill in start
         connectionSocket.send("\r\n".encode())
+        connectionSocket.send("\r\n".encode())
+        connectionSocket.send("<body><h1>404 NOT FOUND</h1></body>".encode())
         connectionSocket.close()
         #Fill in end
     except (ConnectionResetError, BrokenPipeError):
